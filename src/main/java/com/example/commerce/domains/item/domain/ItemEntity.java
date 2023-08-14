@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Table(name = "items")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -18,19 +16,26 @@ import java.util.List;
 public class ItemEntity extends BaseEntity {
     @Id @GeneratedValue
     private Long id;
+    private String imagePath;
     private String name;
     private int price;
     private int stockQuantity;
 
+    private Long categoryId;
+
+    /* 직접 참조
     @OneToMany
     @JoinColumn(name = "category_id")
     private List<CategoryEntity> categoryList;
+     */
 
     @Builder
-    public ItemEntity(String name, int price, int stockQuantity) {
+    public ItemEntity(String name, String imagePath, int price, int stockQuantity, Long categoryId) {
         this.name = name;
+        this.imagePath = imagePath;
         this.price = price;
         this.stockQuantity = stockQuantity;
+        this.categoryId = categoryId;
     }
 
     // ==== 비즈니스 로직 ====
