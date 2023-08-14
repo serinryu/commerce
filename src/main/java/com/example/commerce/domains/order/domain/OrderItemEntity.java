@@ -39,4 +39,9 @@ public class OrderItemEntity extends BaseEntity {
     private void calculateOrderItemTotalAmount() {
         this.orderItemAmount = this.item.getPrice() * orderQuantity;
     }
+
+    // ==== 비즈니스 로직 ====
+    public void cancel() {
+        this.item.addStockQuantity(this.orderQuantity);
+    }
 }

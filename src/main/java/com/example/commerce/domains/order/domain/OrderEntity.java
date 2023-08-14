@@ -2,6 +2,7 @@ package com.example.commerce.domains.order.domain;
 
 import com.example.commerce.common.config.BaseEntity;
 import com.example.commerce.domains.delivery.domain.DeliveryEntity;
+import com.example.commerce.domains.delivery.domain.DeliveryStatus;
 import com.example.commerce.domains.member.domain.MemberEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -64,6 +65,18 @@ public class OrderEntity extends BaseEntity {
         this.totalAmount = this.orderItemList.stream()
                 .mapToInt(orderItem -> orderItem.getOrderItemAmount())
                 .sum();
+    }
+
+    // ==== 비즈니스 로직 ====
+    public void cancel() {
+        if(this.deliveryInformation.getStatus() == DeliveryStatus.COMPLETE_STATUS
+                || this.deliveryInformation.getStatus() == DeliveryStatus.SHIPPING_STATUS)
+            throw new IllegalStateException("이미 배송중이거나 배송이 완료된 주문은 취소가 불가능합니다.");
+
+        this.orderItemList.stream()
+                .forEach(orderItem -> orderItem.cancel());
+
+        this.status = OrderStatus.CANCEL_STATUS;
     }
 
 }
