@@ -6,14 +6,14 @@ import lombok.*;
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class ItemDetails {
+public class ItemResponseDTO {
     private Long id;
     private String imagePath;
     private String name;
     private int price;
     private int stockQuantity;
 
-    public ItemDetails(ItemEntity itemEntity) {
+    public ItemResponseDTO(ItemEntity itemEntity) {
         this.id = itemEntity.getId();
         this.imagePath = itemEntity.getImagePath();
         this.name = itemEntity.getName();

@@ -12,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class ItemService {
     private final ItemRepository itemRepository;
 
-    public ItemDetails findItem(Long id){
+    public ItemResponseDTO findItem(Long id){
         ItemEntity itemEntity = itemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
-        return new ItemDetails(itemEntity);
+        return new ItemResponseDTO(itemEntity);
     }
 
     @Transactional
-    public Long saveItem(AddItemRequest request) {
+    public Long saveItem(AddItemRequestDTO request) {
         ItemEntity newItem = ItemEntity.builder()
                 .name(request.getName())
                 .imagePath(request.getImagePath())

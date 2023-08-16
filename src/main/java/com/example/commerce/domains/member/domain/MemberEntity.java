@@ -15,7 +15,10 @@ import lombok.NoArgsConstructor;
 public class MemberEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
+    private Long id;
+
+    private String authId;
+    private String authPw;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -27,11 +30,12 @@ public class MemberEntity extends BaseEntity {
     private Address address;
 
     @Builder
-    private MemberEntity(String name, String phone, Address address) {
+    private MemberEntity(String authId, String authPw, String name, String phone, Address address) {
         this.role = Role.USER;
+        this.authId = authId;
+        this.authPw = authPw;
         this.name = name;
         this.phone = phone;
         this.address = address;
     }
-
 }

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ItemServiceSliceTest {
+class ItemServiceTest {
 
     @Mock
     private ItemRepository itemRepository;
@@ -39,11 +39,11 @@ class ItemServiceSliceTest {
         when(itemRepository.findById(itemId)).thenReturn(Optional.of(mockItemEntity));
 
         // then
-        ItemDetails itemDetails = itemService.findItem(itemId);
+        ItemResponseDTO itemResponseDTO = itemService.findItem(itemId);
 
-        assertNotNull(itemDetails);
-        assertEquals(itemId, itemDetails.getId());
-        assertEquals("Test Item", itemDetails.getName());
-        assertEquals(1000, itemDetails.getPrice());
+        assertNotNull(itemResponseDTO);
+        assertEquals(itemId, itemResponseDTO.getId());
+        assertEquals("Test Item", itemResponseDTO.getName());
+        assertEquals(1000, itemResponseDTO.getPrice());
     }
 }

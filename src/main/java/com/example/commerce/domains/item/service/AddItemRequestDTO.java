@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @Builder
 @ToString
-public class AddItemRequest {
+public class AddItemRequestDTO {
     @Length(min = 3)
     private String name;
     @Length(min = 3)
