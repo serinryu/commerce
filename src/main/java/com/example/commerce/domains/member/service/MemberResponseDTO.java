@@ -12,6 +12,7 @@ import lombok.*;
 public class MemberResponseDTO {
     private Long id;
     private String authId;
+    // no authPW
     private String name;
     private String phone;
     private Address address;

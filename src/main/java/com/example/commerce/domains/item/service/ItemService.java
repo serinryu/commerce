@@ -12,23 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class ItemService {
     private final ItemRepository itemRepository;
 
+    // 상품 조회
     public ItemResponseDTO findItem(Long id){
         ItemEntity itemEntity = itemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
-        return new ItemResponseDTO(itemEntity);
+        ItemResponseDTO item = new ItemResponseDTO();
+        return item.fromEntity(itemEntity);
     }
 
+    // 상품 저장
     @Transactional
-    public Long saveItem(AddItemRequestDTO request) {
-        ItemEntity newItem = ItemEntity.builder()
-                .name(request.getName())
-                .imagePath(request.getImagePath())
-                .price(request.getPrice())
-                .stockQuantity(request.getStockQuantity())
-                .categoryId(request.getCategoryId())
-                .build();
-        ItemEntity savedItem = itemRepository.save(newItem);
-
-        return savedItem.getId();
+    public ItemResponseDTO saveItem(ItemAddRequestDTO addItemRequestDTO) {
+        ItemEntity itemEntity = itemRepository.save(addItemRequestDTO.toEntity());
+        ItemResponseDTO item = new ItemResponseDTO();
+        return item.fromEntity(itemEntity);
     }
 }

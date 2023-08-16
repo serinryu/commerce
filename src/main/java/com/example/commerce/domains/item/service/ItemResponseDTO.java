@@ -12,12 +12,17 @@ public class ItemResponseDTO {
     private String name;
     private int price;
     private int stockQuantity;
+    // no categoryId
 
-    public ItemResponseDTO(ItemEntity itemEntity) {
-        this.id = itemEntity.getId();
-        this.imagePath = itemEntity.getImagePath();
-        this.name = itemEntity.getName();
-        this.price = itemEntity.getPrice();
-        this.stockQuantity = itemEntity.getStockQuantity();
+    public ItemResponseDTO fromEntity(ItemEntity itemEntity) {
+        ItemResponseDTO dto = new ItemResponseDTO();
+        dto.setId(itemEntity.getId());
+        dto.setImagePath(itemEntity.getImagePath());
+        dto.setName(itemEntity.getName());
+        dto.setPrice(itemEntity.getPrice());
+        dto.setStockQuantity(itemEntity.getStockQuantity());
+
+        return dto;
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.commerce.domains.item.service;
 
+import com.example.commerce.domains.item.domain.ItemEntity;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -10,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @Builder
 @ToString
-public class AddItemRequestDTO {
+public class ItemAddRequestDTO {
     @Length(min = 3)
     private String name;
     @Length(min = 3)
@@ -20,4 +21,14 @@ public class AddItemRequestDTO {
     @Min(1)
     private int stockQuantity;
     private Long categoryId;
+
+    public ItemEntity toEntity() {
+        return ItemEntity.builder()
+            .name(name)
+            .imagePath(imagePath)
+            .price(price)
+            .stockQuantity(stockQuantity)
+            .categoryId(categoryId)
+            .build();
+    }
 }
