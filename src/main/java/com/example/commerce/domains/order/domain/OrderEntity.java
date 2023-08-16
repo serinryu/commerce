@@ -21,9 +21,9 @@ import java.util.List;
 public class OrderEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long orderId;
+    private Long id;
 
-    private int totalAmount;
+    private int totalAmount; // Money
 
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;

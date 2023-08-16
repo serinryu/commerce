@@ -3,17 +3,12 @@ package com.example.commerce.domains.member.service;
 import com.example.commerce.common.value.Address;
 import com.example.commerce.domains.member.domain.MemberEntity;
 import com.example.commerce.domains.member.domain.MemberRepository;
-import com.example.commerce.domains.member.service.MemberService;
-import com.example.commerce.domains.member.service.SignUpRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +26,7 @@ public class MemberServiceTest {
     @Test
     public void testSignUp() {
         // given
-        SignUpRequestDTO request = SignUpRequestDTO.builder()
+        MemberSignUpRequestDTO request = MemberSignUpRequestDTO.builder()
                 .authId("testuser")
                 .authPw("password")
                 .name("Test User")
@@ -43,16 +38,16 @@ public class MemberServiceTest {
         // when
         // 중복 회원 존재하지 않음
         when(memberRepository.findFirstByAuthId(request.getAuthId())).thenReturn(Optional.empty());
-        String memberName = memberService.signUp(request);
+        MemberResponseDTO member = memberService.signUp(request);
 
         // then
-        assertEquals(memberName, "Test User");
+        assertEquals(member.getName(), "Test User");
     }
 
     @Test
     public void testSignUp_DuplicateMember() {
         // given
-        SignUpRequestDTO request = SignUpRequestDTO.builder()
+        MemberSignUpRequestDTO request = MemberSignUpRequestDTO.builder()
                 .authId("testuser")
                 .authPw("password")
                 .name("Test User")
@@ -94,10 +89,10 @@ public class MemberServiceTest {
         // when
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(existingMember));
 
-        String foundMemberName = memberService.findMember(memberId);
+        MemberResponseDTO member = memberService.findMember(memberId);
 
         // then
-        assertEquals("Test User", foundMemberName);
+        assertEquals("Test User", member.getName());
     }
 
     @Test
@@ -109,27 +104,5 @@ public class MemberServiceTest {
         assertThrows(IllegalStateException.class, () -> memberService.findMember(memberId));
     }
 
-    @Test
-    public void testFindAllMember() {
-        // given
-        List<MemberEntity> memberList = new ArrayList<>();
-        MemberEntity member = MemberEntity.builder()
-                .authId("testuser")
-                .authPw("password")
-                .name("Test User")
-                .phone("123-456-7890")
-                .address(new Address("Test City", "Test Street"))
-                .build();
-        memberList.add(member);
-
-        // when
-        when(memberRepository.findAll()).thenReturn(memberList);
-
-        List<String> memberNameList = memberService.findAllMember();
-
-        // then
-        assertEquals(1, memberNameList.size());
-        assertEquals("Test User", memberNameList.get(0));
-    }
 
 }

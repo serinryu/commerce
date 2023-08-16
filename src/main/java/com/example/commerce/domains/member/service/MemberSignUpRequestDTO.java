@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Builder
-public class SignUpRequestDTO {
+public class MemberSignUpRequestDTO {
     @NotBlank
     private String authId;
     @NotBlank

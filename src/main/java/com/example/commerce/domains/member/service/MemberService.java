@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,14 +15,9 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public String signUp(SignUpRequestDTO request){
+    // 회원가입
+    public MemberResponseDTO signUp(MemberSignUpRequestDTO request){
 
-        // 중복 회원 예외
-        /*
-        if(memberRepository.findFirstByAuthId(request.getAuthId()).isPresent()){
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
-        }
-        */
         validateDuplicateMember(request.getAuthId());
 
         // 회원 저장
@@ -36,7 +30,10 @@ public class MemberService {
                 .build();
         memberRepository.save(newMember);
 
-        return newMember.getName();
+        // Entity to DTO
+        MemberResponseDTO newMemberDto = MemberResponseDTO.fromEntity(newMember);
+
+        return newMemberDto;
     }
 
     private void validateDuplicateMember(String authId){
@@ -46,26 +43,17 @@ public class MemberService {
         }
     }
 
-    public String findMember(Long id){
-        /*
-        MemberEntity member = memberRepository.findById(id)
-        .orElseThrow(() -> new IllegalStateException("존재하지 않는 유저입니다."));
-         */
+    // 회원 찾기
+    public MemberResponseDTO findMember(Long id){
         MemberEntity member = validateExistMember(memberRepository.findById(id));
-        return member.getName();
+        MemberResponseDTO memberResponseDTO = MemberResponseDTO.fromEntity(member);
+        return memberResponseDTO;
     }
 
     private MemberEntity validateExistMember(Optional<MemberEntity> memberEntity) {
         if(!memberEntity.isPresent())
             throw new IllegalStateException("존재하지 않는 유저입니다.");
         return memberEntity.get();
-    }
-
-    public List<String> findAllMember(){
-        List<MemberEntity> memberList = memberRepository.findAll();
-        List<String> memberNameList = memberList.stream().map(
-            m -> m.getName()).toList();
-        return memberNameList;
     }
 
 }

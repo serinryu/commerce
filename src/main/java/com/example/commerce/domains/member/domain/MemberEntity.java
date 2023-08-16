@@ -2,6 +2,7 @@ package com.example.commerce.domains.member.domain;
 
 import com.example.commerce.common.config.BaseEntity;
 import com.example.commerce.common.value.Address;
+import com.example.commerce.domains.member.service.MemberResponseDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
