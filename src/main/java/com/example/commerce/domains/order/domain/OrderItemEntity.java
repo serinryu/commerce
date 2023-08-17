@@ -17,31 +17,35 @@ public class OrderItemEntity extends BaseEntity {
     @GeneratedValue
     private Long id;
 
-    private int orderQuantity;
-    private int orderItemAmount;
+    private int orderCount; // 주문 상품의 갯수
+    private int orderItemAmount; // 주문 상품의 가격
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private ItemEntity item;
 
     @Builder
-    public OrderItemEntity(ItemEntity item, int orderQuantity) {
-        this.order(item, orderQuantity);
-        this.orderQuantity = orderQuantity;
+    public OrderItemEntity(ItemEntity item, int orderCount) {
+        this.order(item, orderCount);
         this.calculateOrderItemTotalAmount();
     }
 
-    private void order(ItemEntity item, int orderQuantity) {
-        //item.removeStockQuantity(orderQuantity);
+    private void order(ItemEntity item, int orderCount) {
+        item.removeStockQuantity(orderCount); // 주문된 상품의 갯수 만큼 재고 -1
         this.item = item;
+        this.orderCount = orderCount;
     }
 
     private void calculateOrderItemTotalAmount() {
-        this.orderItemAmount = this.item.getPrice() * orderQuantity;
+        this.orderItemAmount = this.item.getPrice() * orderCount;
     }
 
     // ==== 비즈니스 로직 ====
     public void cancel() {
-        this.item.addStockQuantity(this.orderQuantity);
+        this.item.addStockQuantity(this.orderCount);
+    }
+
+    public void removeStockQuantity(){
+        this.item.removeStockQuantity(orderCount);
     }
 }
