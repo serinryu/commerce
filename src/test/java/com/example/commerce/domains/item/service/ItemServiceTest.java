@@ -27,13 +27,7 @@ class ItemServiceTest {
     @Test
     public void testFindItem() {
         // given
-        ItemEntity mockItemEntity = ItemEntity.builder()
-            .name("Test Item")
-            .imagePath("example")
-            .price(1000)
-            .stockQuantity(2)
-            .categoryId(3L)
-            .build();
+        ItemEntity mockItemEntity = createItemEntity();
         Long itemId = mockItemEntity.getId();
 
         // when
@@ -52,13 +46,7 @@ class ItemServiceTest {
     @Test
     public void testSaveItem() {
         // Mock data
-        ItemCreateRequestDTO itemCreateRequestDTO = ItemCreateRequestDTO.builder()
-                .name("Sample Item")
-                .imagePath("sample.jpg")
-                .price(1000)
-                .stockQuantity(10)
-                .categoryId(3L)
-                .build();
+        ItemCreateRequestDTO itemCreateRequestDTO = createItemCreateRequestDTO();
         ItemEntity itemEntity = itemCreateRequestDTO.toEntity();
         when(itemRepository.save(any(ItemEntity.class))).thenReturn(itemEntity);
 
@@ -70,6 +58,26 @@ class ItemServiceTest {
         assertEquals("sample.jpg", savedItemResponseDTO.getImagePath());
         assertEquals(1000, savedItemResponseDTO.getPrice());
         assertEquals(10, savedItemResponseDTO.getStockQuantity());
+    }
+
+    private ItemCreateRequestDTO createItemCreateRequestDTO(){
+        return ItemCreateRequestDTO.builder()
+                .name("Sample Item")
+                .imagePath("sample.jpg")
+                .price(1000)
+                .stockQuantity(10)
+                .categoryId(3L)
+                .build();
+    }
+
+    private ItemEntity createItemEntity(){
+        return ItemEntity.builder()
+                .name("Test Item")
+                .imagePath("example")
+                .price(1000)
+                .stockQuantity(2)
+                .categoryId(3L)
+                .build();
     }
 
 }
