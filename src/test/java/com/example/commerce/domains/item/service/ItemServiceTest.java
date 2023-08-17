@@ -52,18 +52,18 @@ class ItemServiceTest {
     @Test
     public void testSaveItem() {
         // Mock data
-        ItemAddRequestDTO itemAddRequestDTO = ItemAddRequestDTO.builder()
+        ItemCreateRequestDTO itemCreateRequestDTO = ItemCreateRequestDTO.builder()
                 .name("Sample Item")
                 .imagePath("sample.jpg")
                 .price(1000)
                 .stockQuantity(10)
                 .categoryId(3L)
                 .build();
-        ItemEntity itemEntity = itemAddRequestDTO.toEntity();
+        ItemEntity itemEntity = itemCreateRequestDTO.toEntity();
         when(itemRepository.save(any(ItemEntity.class))).thenReturn(itemEntity);
 
         // when
-        ItemResponseDTO savedItemResponseDTO = itemService.saveItem(itemAddRequestDTO);
+        ItemResponseDTO savedItemResponseDTO = itemService.saveItem(itemCreateRequestDTO);
 
         // then
         assertEquals("Sample Item", savedItemResponseDTO.getName());

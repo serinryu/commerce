@@ -60,14 +60,14 @@ public class OrderServiceTest {
 
         // 주문 요청
         int orderCount = 2;
-        OrderRequestDTO orderRequestDTO = createOrderRequestDTO(TEST_ITEM_ID, orderCount);
+        OrderCreateRequestDTO orderCreateRequestDTO = createOrderRequestDTO(TEST_ITEM_ID, orderCount);
 
         // 주문
         OrderEntity TEST_ORDER = createOrder(TEST_MEMBER, TEST_ITEM, orderCount);
         when(orderRepository.save(any(OrderEntity.class))).thenReturn(TEST_ORDER);
 
         // when
-        OrderResponseDTO order = orderService.order(TEST_MEMBER_ID, orderRequestDTO);
+        OrderResponseDTO order = orderService.order(TEST_MEMBER_ID, orderCreateRequestDTO);
 
         // then
         assertNotNull(order);
@@ -149,10 +149,10 @@ public class OrderServiceTest {
         return TEST_ORDER;
     }
 
-    private OrderRequestDTO createOrderRequestDTO(Long itemId, int orderCount) {
-        List<OrderItemRequestDTO> orderLineRequests = List.of(new OrderItemRequestDTO(itemId, orderCount));
+    private OrderCreateRequestDTO createOrderRequestDTO(Long itemId, int orderCount) {
+        List<OrderItemCreateRequestDTO> orderLineRequests = List.of(new OrderItemCreateRequestDTO(itemId, orderCount));
 
-        OrderRequestDTO orderRequest = new OrderRequestDTO(orderLineRequests);
+        OrderCreateRequestDTO orderRequest = new OrderCreateRequestDTO(orderLineRequests);
 
         return orderRequest;
     }

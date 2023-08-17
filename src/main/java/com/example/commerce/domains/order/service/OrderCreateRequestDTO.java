@@ -9,6 +9,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderRequestDTO {
-    private List<OrderItemRequestDTO> orderItemList;
+public class OrderCreateRequestDTO {
+    private List<OrderItemCreateRequestDTO> orderItemList;
 }

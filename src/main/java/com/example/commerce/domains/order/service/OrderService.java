@@ -25,7 +25,7 @@ public class OrderService {
     private final ItemRepository itemRepository;
 
     // 주문하기 (주문 생성 -> 주문 저장)
-    public OrderResponseDTO order(Long ordererId, OrderRequestDTO orderRequestDTO){
+    public OrderResponseDTO order(Long ordererId, OrderCreateRequestDTO orderCreateRequestDTO){
         // 주문자 조회
         // MemberResponseDTO orderer = memberService.findMember(ordererId);
         MemberEntity orderer = memberRepository.findById(ordererId).get();
@@ -36,7 +36,7 @@ public class OrderService {
                 .build();
 
         // 주문 상품 생성
-        List<OrderItemEntity> orderItemEntityList = orderRequestDTO.getOrderItemList()
+        List<OrderItemEntity> orderItemEntityList = orderCreateRequestDTO.getOrderItemList()
                 .stream()
                 .map(ol -> {
                     // 각 주문 상품 (OrderItem)
@@ -57,7 +57,7 @@ public class OrderService {
                 .build();
 
         /* 장바구니 비우기
-        List<Long> itemIdList = orderRequestDTO.getOrderItemList().stream()
+        List<Long> itemIdList = orderCreateRequestDTO.getOrderItemList().stream()
                 .map(ol -> ol.getItemId())
                 .collect(Collectors.toList());
         // cart 생성 이후 로직

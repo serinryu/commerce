@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItemRequestDTO {
+public class OrderItemCreateRequestDTO {
     private Long itemId; // 주문 상품의 id (OrderItem)
     private int orderCount; // 주문 상품의 갯수
 }

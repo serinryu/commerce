@@ -22,8 +22,8 @@ public class ItemService {
 
     // 상품 저장
     @Transactional
-    public ItemResponseDTO saveItem(ItemAddRequestDTO addItemRequestDTO) {
-        ItemEntity itemEntity = itemRepository.save(addItemRequestDTO.toEntity());
+    public ItemResponseDTO saveItem(ItemCreateRequestDTO itemCreateRequestDTO) {
+        ItemEntity itemEntity = itemRepository.save(itemCreateRequestDTO.toEntity());
         ItemResponseDTO item = new ItemResponseDTO();
         return item.fromEntity(itemEntity);
     }

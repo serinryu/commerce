@@ -3,6 +3,7 @@ package com.example.commerce.domains.member.service;
 import com.example.commerce.common.value.Address;
 import com.example.commerce.domains.member.domain.MemberEntity;
 import com.example.commerce.domains.member.domain.MemberRepository;
+import com.example.commerce.domains.member.exception.AlreadySignUpUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +40,7 @@ public class MemberService {
     private void validateDuplicateMember(String authId){
         Optional<MemberEntity> existingMember = memberRepository.findFirstByAuthId(authId);
         if(existingMember.isPresent()){
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            throw AlreadySignUpUserException.EXCEPTION;
         }
     }
 
