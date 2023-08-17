@@ -6,6 +6,8 @@ import lombok.*;
 @RequiredArgsConstructor
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class ItemResponseDTO {
     private Long id;
     private String imagePath;

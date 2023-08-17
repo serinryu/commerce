@@ -22,7 +22,7 @@ public class OrderController {
     }
 
     // 주문 취소
-    @DeleteMapping("/{orderId}")
+    @DeleteMapping("/orders/{orderId}")
     public ResponseEntity<String> cancelOrder(@PathVariable Long orderId) {
         orderService.cancel(orderId);
         return ResponseEntity.ok("Order canceled successfully");

@@ -6,6 +6,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
@@ -17,7 +18,6 @@ public class OrderResponseDTO {
         OrderResponseDTO dto = new OrderResponseDTO();
         dto.setId(orderEntity.getId());
         dto.setStatus(String.valueOf(orderEntity.getStatus()));
-
         return dto;
     }
 }
