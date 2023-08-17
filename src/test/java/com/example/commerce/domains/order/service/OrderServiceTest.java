@@ -4,7 +4,7 @@ import com.example.commerce.common.value.Address;
 import com.example.commerce.domains.delivery.domain.DeliveryEntity;
 import com.example.commerce.domains.item.domain.ItemEntity;
 import com.example.commerce.domains.item.domain.ItemRepository;
-import com.example.commerce.domains.item.service.NotEnoughStockQuantityException;
+import com.example.commerce.domains.item.exception.NotEnoughStockQuantityException;
 import com.example.commerce.domains.member.domain.MemberEntity;
 import com.example.commerce.domains.member.domain.MemberRepository;
 import com.example.commerce.domains.order.domain.OrderEntity;

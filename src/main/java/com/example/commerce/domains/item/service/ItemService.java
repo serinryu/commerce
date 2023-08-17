@@ -2,6 +2,7 @@ package com.example.commerce.domains.item.service;
 
 import com.example.commerce.domains.item.domain.ItemEntity;
 import com.example.commerce.domains.item.domain.ItemRepository;
+import com.example.commerce.domains.item.exception.ItemNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ public class ItemService {
     // 상품 조회
     public ItemResponseDTO findItem(Long id){
         ItemEntity itemEntity = itemRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+                .orElseThrow(() -> ItemNotFoundException.EXCEPTION);
         ItemResponseDTO item = new ItemResponseDTO();
         return item.fromEntity(itemEntity);
     }

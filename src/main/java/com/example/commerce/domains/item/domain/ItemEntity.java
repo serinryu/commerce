@@ -1,7 +1,7 @@
 package com.example.commerce.domains.item.domain;
 
 import com.example.commerce.common.config.BaseEntity;
-import com.example.commerce.domains.item.service.NotEnoughStockQuantityException;
+import com.example.commerce.domains.item.exception.NotEnoughStockQuantityException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -42,7 +42,7 @@ public class ItemEntity extends BaseEntity {
     public void removeStockQuantity(int orderQuantity) {
         int restStockQuantity = this.stockQuantity - orderQuantity;
         if(restStockQuantity < 0)
-            throw new NotEnoughStockQuantityException();
+            throw NotEnoughStockQuantityException.EXCEPTION;
         this.stockQuantity = restStockQuantity;
     }
 
