@@ -4,6 +4,7 @@ import com.example.commerce.common.value.Address;
 import com.example.commerce.domains.member.domain.MemberEntity;
 import com.example.commerce.domains.member.domain.MemberRepository;
 import com.example.commerce.domains.member.exception.AlreadySignUpUserException;
+import com.example.commerce.domains.member.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +54,7 @@ public class MemberService {
 
     private MemberEntity validateExistMember(Optional<MemberEntity> memberEntity) {
         if(!memberEntity.isPresent())
-            throw new IllegalStateException("존재하지 않는 유저입니다.");
+            throw UserNotFoundException.EXCEPTION;
         return memberEntity.get();
     }
 
