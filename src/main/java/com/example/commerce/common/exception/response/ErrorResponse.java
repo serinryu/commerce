@@ -14,7 +14,7 @@ public class ErrorResponse {
 
     private final String path;
 
-    public ErrorResponse(ErrorReason errorReason, String path) {
+    private ErrorResponse(ErrorReason errorReason, String path) {
         this.status = errorReason.getStatus();
         this.code = errorReason.getCode();
         this.reason = errorReason.getReason();
@@ -22,11 +22,23 @@ public class ErrorResponse {
         this.path = path;
     }
 
-    public ErrorResponse(int status, String code, String reason, String path) {
+    private ErrorResponse(int status, String code, String reason, String path) {
         this.status = status;
         this.code = code;
         this.reason = reason;
         this.timeStamp = LocalDateTime.now();
         this.path = path;
+    }
+
+    /*
+    기본 생성자 대신 정적 팩토리 메소드 of
+     */
+
+    public static ErrorResponse of(final ErrorReason errorReason, final String path){
+        return new ErrorResponse(errorReason, path);
+    }
+
+    public static ErrorResponse of(final int status, final String code, final String reason, final String path){
+        return new ErrorResponse(status, code, reason, path);
     }
 }

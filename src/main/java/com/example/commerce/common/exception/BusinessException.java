@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CodeException extends RuntimeException {
+public class BusinessException extends RuntimeException {
     private ErrorCode errorCode;
 
     public ErrorReason getErrorReason() {

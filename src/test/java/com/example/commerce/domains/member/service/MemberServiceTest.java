@@ -28,14 +28,7 @@ public class MemberServiceTest {
     @Test
     public void testSignUp() {
         // given
-        MemberSignUpRequestDTO request = MemberSignUpRequestDTO.builder()
-                .authId("testuser")
-                .authPw("password")
-                .name("Test User")
-                .phone("123-456-7890")
-                .city("Test City")
-                .street("Test Street")
-                .build();
+        MemberSignUpRequestDTO request = createMemberSignUpRequestDTO();
 
         // when
         // 중복 회원 존재하지 않음
@@ -49,22 +42,9 @@ public class MemberServiceTest {
     @Test
     public void testSignUp_DuplicateMember() {
         // given
-        MemberSignUpRequestDTO request = MemberSignUpRequestDTO.builder()
-                .authId("testuser")
-                .authPw("password")
-                .name("Test User")
-                .phone("123-456-7890")
-                .city("Test City")
-                .street("Test Street")
-                .build();
+        MemberSignUpRequestDTO request = createMemberSignUpRequestDTO();
 
-        MemberEntity existingMember = MemberEntity.builder()
-                .authId("testuser")
-                .authPw("password")
-                .name("Test User")
-                .phone("123-456-7890")
-                .address(new Address("Test City", "Test Street"))
-                .build();
+        MemberEntity existingMember = createMemberEntity();
 
         // when
         // 중복 회원 존재
@@ -79,13 +59,7 @@ public class MemberServiceTest {
     @Test
     public void testFindMember() {
         // given
-        MemberEntity existingMember = MemberEntity.builder()
-                .authId("testuser")
-                .authPw("password")
-                .name("Test User")
-                .phone("123-456-7890")
-                .address(new Address("Test City", "Test Street"))
-                .build();
+        MemberEntity existingMember = createMemberEntity();
         Long memberId = existingMember.getId();
 
         // when
@@ -106,5 +80,32 @@ public class MemberServiceTest {
         assertThrows(UserNotFoundException.class, () -> memberService.findMember(memberId));
     }
 
+    private String authId = "testuser";
+    private String authPw = "password";
+    private String name = "Test User";
+    private String phone = "123-456-7890";
+    private String city = "Test City";
+    private String street = "Test Street";
+
+    private MemberSignUpRequestDTO createMemberSignUpRequestDTO(){
+        return MemberSignUpRequestDTO.builder()
+                .authId(authId)
+                .authPw(authPw)
+                .name(name)
+                .phone(phone)
+                .city(city)
+                .street(street)
+                .build();
+    }
+
+    private MemberEntity createMemberEntity(){
+        return MemberEntity.builder()
+                .authId(authId)
+                .authPw(authPw)
+                .name(name)
+                .phone(phone)
+                .address(new Address(city, street))
+                .build();
+    }
 
 }

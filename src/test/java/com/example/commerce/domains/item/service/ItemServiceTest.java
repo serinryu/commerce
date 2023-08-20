@@ -27,13 +27,7 @@ class ItemServiceTest {
     @Test
     public void testFindItem() {
         // given
-        ItemEntity mockItemEntity = ItemEntity.builder()
-            .name("Test Item")
-            .imagePath("example")
-            .price(1000)
-            .stockQuantity(2)
-            .categoryId(3L)
-            .build();
+        ItemEntity mockItemEntity = createItemEntity();
         Long itemId = mockItemEntity.getId();
 
         // when
@@ -44,21 +38,15 @@ class ItemServiceTest {
 
         assertNotNull(itemResponseDTO);
         assertEquals(itemId, itemResponseDTO.getId());
-        assertEquals("Test Item", itemResponseDTO.getName());
-        assertEquals(1000, itemResponseDTO.getPrice());
+        assertEquals(name, itemResponseDTO.getName());
+        assertEquals(price, itemResponseDTO.getPrice());
     }
 
 
     @Test
     public void testSaveItem() {
         // Mock data
-        ItemCreateRequestDTO itemCreateRequestDTO = ItemCreateRequestDTO.builder()
-                .name("Sample Item")
-                .imagePath("sample.jpg")
-                .price(1000)
-                .stockQuantity(10)
-                .categoryId(3L)
-                .build();
+        ItemCreateRequestDTO itemCreateRequestDTO = createItemCreateRequestDTO();
         ItemEntity itemEntity = itemCreateRequestDTO.toEntity();
         when(itemRepository.save(any(ItemEntity.class))).thenReturn(itemEntity);
 
@@ -66,10 +54,37 @@ class ItemServiceTest {
         ItemResponseDTO savedItemResponseDTO = itemService.saveItem(itemCreateRequestDTO);
 
         // then
-        assertEquals("Sample Item", savedItemResponseDTO.getName());
-        assertEquals("sample.jpg", savedItemResponseDTO.getImagePath());
-        assertEquals(1000, savedItemResponseDTO.getPrice());
-        assertEquals(10, savedItemResponseDTO.getStockQuantity());
+        assertEquals(name, savedItemResponseDTO.getName());
+        assertEquals(imagePath, savedItemResponseDTO.getImagePath());
+        assertEquals(price, savedItemResponseDTO.getPrice());
+        assertEquals(stockQuantity, savedItemResponseDTO.getStockQuantity());
+    }
+
+    private Long TEST_ITEM_ID = 123L;
+    private String imagePath = "sample.jpg";
+    private String name = "Sample Item";
+    private int price = 1000;
+    private int stockQuantity = 10;
+    private Long categoryId = 3L;
+
+    private ItemCreateRequestDTO createItemCreateRequestDTO(){
+        return ItemCreateRequestDTO.builder()
+                .name(name)
+                .imagePath(imagePath)
+                .price(price)
+                .stockQuantity(stockQuantity)
+                .categoryId(categoryId)
+                .build();
+    }
+
+    private ItemEntity createItemEntity(){
+        return ItemEntity.builder()
+                .name(name)
+                .imagePath(imagePath)
+                .price(price)
+                .stockQuantity(stockQuantity)
+                .categoryId(categoryId)
+                .build();
     }
 
 }

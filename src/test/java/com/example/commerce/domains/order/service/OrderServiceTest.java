@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
 
@@ -90,7 +89,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void testNotEnoghStockQuantity() throws Exception {
+    public void testNotEnoughStockQuantity() throws Exception {
         //given
         Long TEST_MEMBER_ID = 1l;
         MemberEntity TEST_MEMBER = createMember();
