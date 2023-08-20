@@ -24,6 +24,6 @@ public class ItemController {
     @PostMapping("/items")
     public ResponseEntity<ItemResponseDTO> saveItem(@RequestBody @Valid ItemCreateRequestDTO request){
         ItemResponseDTO response = itemService.saveItem(request);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.status(201).body(response);
     }
 }

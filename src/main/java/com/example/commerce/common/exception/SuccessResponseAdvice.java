@@ -40,7 +40,7 @@ public class SuccessResponseAdvice implements ResponseBodyAdvice {
         }
 
         if (resolve.is2xxSuccessful()) {
-            return new SuccessResponse(status, body);
+            return SuccessResponse.of(status, body);
         }
 
         return body;

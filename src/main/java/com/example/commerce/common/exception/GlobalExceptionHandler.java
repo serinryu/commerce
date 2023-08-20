@@ -34,12 +34,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * Custom Exception 에 대한 예외처리
      */
 
-    @ExceptionHandler(CodeException.class)
-    public ResponseEntity<ErrorResponse> CodeExceptionHandler(CodeException e, HttpServletRequest request) {
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleCodeException(BusinessException e, HttpServletRequest request) {
         ErrorCode code = e.getErrorCode();
         ErrorReason errorReason = code.getErrorReason();
-        ErrorResponse errorResponse =
-                new ErrorResponse(errorReason, request.getRequestURL().toString());
+        ErrorResponse errorResponse = ErrorResponse.of(errorReason, request.getRequestURL().toString());
         return ResponseEntity
                 .status(HttpStatus.valueOf(errorReason.getStatus()))
                 .body(errorResponse);
@@ -66,8 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                         FieldError::getField, FieldError::getDefaultMessage));
 
         String errorsToJsonString = new ObjectMapper().writeValueAsString(fieldAndErrorMessages);
-        ErrorResponse errorResponse =
-                new ErrorResponse(status.value(), status.toString(), errorsToJsonString, url);
+        ErrorResponse errorResponse = ErrorResponse.of(status.value(), status.toString(), errorsToJsonString, url);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
@@ -82,8 +80,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         .build()
                         .toUriString();
         ErrorCode internalServerError = ErrorCode.INTERNAL_SERVER_ERROR;
-        ErrorResponse errorResponse =
-                new ErrorResponse(
+        ErrorResponse errorResponse = ErrorResponse.of(
                         internalServerError.getStatus(),
                         internalServerError.getCode(),
                         internalServerError.getReason(),
