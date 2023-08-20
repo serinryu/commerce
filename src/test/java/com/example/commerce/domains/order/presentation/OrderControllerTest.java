@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.commerce.domains.order.domain.OrderStatus.ORDERED_STATUS;
-import static org.hamcrest.Matchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(OrderController.class)

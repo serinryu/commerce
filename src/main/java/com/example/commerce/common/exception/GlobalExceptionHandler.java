@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
-     * Custom Exception 에 대한 예외처리
+     * 비즈니스 요구사항에 따른 Exception
      */
 
     @ExceptionHandler(BusinessException.class)
@@ -71,7 +71,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * 작성하지 않은 다른 모든 예외에 대해 처리. 이 때 500 status code와 함께 반환한다.
+     * 그 밖에 발생하는 모든 예외처리가 이곳으로 모인다.
      */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e, HttpServletRequest request){
