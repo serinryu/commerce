@@ -1,5 +1,7 @@
 package com.example.commerce.domains.item.presentation;
 
+import com.example.commerce.common.exception.SuccessCode;
+import com.example.commerce.common.exception.response.SuccessResponse;
 import com.example.commerce.domains.item.service.ItemCreateRequestDTO;
 import com.example.commerce.domains.item.service.ItemResponseDTO;
 import com.example.commerce.domains.item.service.ItemService;
@@ -15,15 +17,15 @@ public class ItemController {
 
     // 상품 조회
     @GetMapping("/items/{id}")
-    public ResponseEntity<ItemResponseDTO> findItem(@PathVariable Long id){
-        ItemResponseDTO response = itemService.findItem(id);
-        return ResponseEntity.ok().body(response);
+    public SuccessResponse<ItemResponseDTO> findItem(@PathVariable Long id){
+        ItemResponseDTO data = itemService.findItem(id);
+        return SuccessResponse.of(SuccessCode.GET_INFO_SUCCESS, data);
     }
 
     // 상품 저장
     @PostMapping("/items")
-    public ResponseEntity<ItemResponseDTO> saveItem(@RequestBody @Valid ItemCreateRequestDTO request){
-        ItemResponseDTO response = itemService.saveItem(request);
-        return ResponseEntity.status(201).body(response);
+    public SuccessResponse<ItemResponseDTO> saveItem(@RequestBody @Valid ItemCreateRequestDTO request){
+        ItemResponseDTO data = itemService.saveItem(request);
+        return SuccessResponse.of(SuccessCode.CREATE_SUCCESS, data);
     }
 }
