@@ -9,33 +9,22 @@ import lombok.Getter;
 import org.springframework.validation.FieldError;
 
 @Getter
-public class ErrorResponse {
+public class ErrorResponse extends Response{
 
-    private final boolean success = false;
-    private final int status;
-    private final String code;
-    private final String message;
-    private final LocalDateTime timeStamp;
     private final List<FieldError> errors;
 
     private ErrorResponse(ErrorCode errorCode, List<FieldError> errors) {
-        this.status = errorCode.getStatus();
-        this.code = errorCode.getCode();
-        this.message = errorCode.getMessage();
-        this.timeStamp = LocalDateTime.now();
+        super(false, errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage(), LocalDateTime.now());
         this.errors = errors;
     }
 
     private ErrorResponse(ErrorCode errorCode) {
-        this.status = errorCode.getStatus();
-        this.code = errorCode.getCode();
-        this.message = errorCode.getMessage();
-        this.timeStamp = LocalDateTime.now();
+        super(false, errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage(), LocalDateTime.now());
         this.errors = new ArrayList<>();
     }
 
     /*
-    기본 생성자 대신 정적 팩토리 메소드 of
+    기본 생성자 대신 정적 팩토리 메소드 of : 입력 매개변수에 따라 유연하게 ErrorResponse 객체를 반환하므로써 다양한 예외처리에 대응
      */
 
     public static ErrorResponse of(final ErrorCode code) {
@@ -45,5 +34,7 @@ public class ErrorResponse {
     public static ErrorResponse of(final ErrorCode code, final List<FieldError> errors) {
         return new ErrorResponse(code, errors);
     }
+
+
 
 }

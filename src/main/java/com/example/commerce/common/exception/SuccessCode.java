@@ -7,13 +7,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SuccessCode {
 
-    GET_INFO_SUCCESS(200, "E001", "retrieved successfully"),
-    CREATE_SUCCESS(201, "E002", "created successfully"),
-    UPDATE_SUCCESS(200, "E003", "updated successfully"),
-    DELETE_SUCCESS(200, "E004", "deleted successfully");
+    GET_INFO_SUCCESS(200,  "retrieved successfully"),
+    CREATE_SUCCESS(201, "created successfully"),
+    UPDATE_SUCCESS(200, "updated successfully"),
+    DELETE_SUCCESS(200, "deleted successfully");
 
     private final int status;
-    private final String code;
     private final String message;
 
 }

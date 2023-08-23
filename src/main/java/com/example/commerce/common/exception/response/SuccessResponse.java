@@ -6,21 +6,14 @@ import com.example.commerce.common.exception.SuccessCode;
 import lombok.Getter;
 
 @Getter
-public class SuccessResponse<T> {
+public class SuccessResponse<T> extends Response{
 
-    private final boolean success = true;
-    private final int status;
-    private final String code;
-    private final String message;
-    private final LocalDateTime timeStamp;
     private final T data;
 
     private SuccessResponse(SuccessCode successCode, T data) {
-        this.status = successCode.getStatus();
-        this.code = successCode.getCode();
-        this.message = successCode.getMessage();
+        // 성공 시 code 는 항상 0
+        super(true, successCode.getStatus(), "0", successCode.getMessage(), LocalDateTime.now());
         this.data = data;
-        this.timeStamp = LocalDateTime.now();
     }
 
     /*

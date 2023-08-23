@@ -7,7 +7,6 @@ import com.example.commerce.domains.item.service.ItemResponseDTO;
 import com.example.commerce.domains.item.service.ItemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
