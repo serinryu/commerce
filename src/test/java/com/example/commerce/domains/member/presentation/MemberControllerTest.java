@@ -41,7 +41,7 @@ public class MemberControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/member/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data.id").value(responseDTO.getId()))
                 .andExpect(jsonPath("$.data.name").value(responseDTO.getName()));

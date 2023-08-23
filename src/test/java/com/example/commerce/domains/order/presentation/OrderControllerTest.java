@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.commerce.domains.order.domain.OrderStatus.ORDERED_STATUS;
@@ -66,7 +65,7 @@ public class OrderControllerTest {
                         .param("ordererId", "123")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data.id").value(responseDTO.getId()))
                 .andExpect(jsonPath("$.data.status").value(responseDTO.getStatus()));
