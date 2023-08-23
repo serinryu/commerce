@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
 
     // 비즈니스 요구사항에 따른 예외 처리
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleCodeException(BusinessException e) {
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())
                 .body(ErrorResponse.of(e.getErrorCode(), e.getErrors()));
