@@ -29,9 +29,14 @@ public class CartEntity {
     @MapKeyColumn(name = "map_key")
     private Map<Long, CartLine> cartLines =  new HashMap<>();
 
+    // CartEntity의 생성자. 생성될 때 꼭 필요한 값은 장바구니의 소유자(member)의 id값 이 전부
     public CartEntity(Long memberId) {
         this.memberId = memberId;
     }
+
+    /*
+    비지니스 메소드
+     */
 
     // 장바구니에 상품 추가
     public void addItemToCart(int targetStockQuantity, CartLine cartLine) {
