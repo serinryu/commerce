@@ -21,7 +21,7 @@ public enum ErrorCode {
 
     // Item
     ITEM_NOT_FOUND(404, "ITEM_404_1", "상품 정보를 찾을 수 없습니다."),
-    NO_ITEM_STOCK_LEFT(400, "ITEM_400_1", "상품의 재고가 없습니다.");
+    NO_ITEM_STOCK_LEFT(400, "ITEM_400_1", "상품의 재고량이 충분하지 않습니다.");
 
     private final int status;
     private final String code;

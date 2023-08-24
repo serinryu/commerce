@@ -1,12 +1,11 @@
 package com.example.commerce.domains.cart.domain;
 
+import com.example.commerce.domains.item.exception.NotEnoughStockQuantityException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -35,8 +34,10 @@ public class CartEntity {
     }
 
     // 장바구니에 상품 추가
-    public void addItemToCart(CartLine cartLine) {
+    public void addItemToCart(int targetStockQuantity, CartLine cartLine) {
         Long itemId = cartLine.getItemId(); // cartLine 의 itemId 가 map_key 가 될 예정
+
+        verifyEnoughStockQuantity(targetStockQuantity, cartLine.getOrderCount());
 
         // 해당 itemId로 된 아이템이 존재하는 경우
         if (cartLines.containsKey(itemId)) {
@@ -53,8 +54,9 @@ public class CartEntity {
     }
 
     // 장바구니 상품 개수 수정
-    public void modifyOrderCount(CartLine newCartLine){
-        this.cartLines.replace(newCartLine.getItemId(), newCartLine); // itemId 가 map_key 로 설정했음
+    public void modifyOrderCount(int targetStockQuantity, CartLine cartLine){
+        verifyEnoughStockQuantity(targetStockQuantity, cartLine.getOrderCount());
+        this.cartLines.replace(cartLine.getItemId(), cartLine); // itemId 가 map_key 로 설정했음
     }
 
     // 장바구니에서 상품 삭제
@@ -62,4 +64,10 @@ public class CartEntity {
         this.cartLines.remove(cartItemId);
     }
 
+    // 재고량 확인
+    private void verifyEnoughStockQuantity(int targetStockQuantity, int orderCount) {
+        if (orderCount > targetStockQuantity) {
+            throw NotEnoughStockQuantityException.EXCEPTION;
+        }
+    }
 }
