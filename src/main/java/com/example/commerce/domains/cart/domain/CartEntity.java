@@ -34,7 +34,7 @@ public class CartEntity {
         this.memberId = memberId;
     }
 
-    //  Map 자료형인 cart 을 사용한 addItemToCart() 메서드 예시
+    // 장바구니에 상품 추가
     public void addItemToCart(CartLine cartLine) {
         Long itemId = cartLine.getItemId(); // cartLine 의 itemId 가 map_key 가 될 예정
 
@@ -50,6 +50,16 @@ public class CartEntity {
             // 장바구니에 추가
             cartLines.put(itemId, cartLine);
         }
+    }
+
+    // 장바구니 상품 개수 수정
+    public void modifyOrderCount(CartLine newCartLine){
+        this.cartLines.replace(newCartLine.getItemId(), newCartLine); // itemId 가 map_key 로 설정했음
+    }
+
+    // 장바구니에서 상품 삭제
+    public void removeCartLine(Long cartItemId){
+        this.cartLines.remove(cartItemId);
     }
 
 }
