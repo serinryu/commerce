@@ -35,7 +35,7 @@ public class CartEntity {
     }
 
     /*
-    비지니스 메소드
+    비지니스 메소드 (Entity 의 필드 변경)
      */
 
     // 장바구니에 상품 추가
@@ -65,6 +65,7 @@ public class CartEntity {
     }
 
     // 장바구니에서 상품 삭제
+    // 특정 상품들만 주문하는 경우가 존재하므로, 장바구니를 그냥 비우는게 아닌, id를 기준으로 비워야함
     public void removeCartLine(Long cartItemId){
         this.cartLines.remove(cartItemId);
     }
