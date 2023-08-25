@@ -16,6 +16,7 @@ public class OrderController {
     private final OrderService orderService;
 
     // 주문하기
+    // 이후에는 SpringSecurity의 기능을 이용해, 현재 로그인 중인 사용자의 정보를 얻어와 사용 (Authentication 객체)
     @PostMapping("/orders")
     public ResponseEntity<SuccessResponse<OrderResponseDTO>> createOrder(
             @RequestParam Long ordererId,
