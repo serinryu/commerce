@@ -2,6 +2,7 @@ package com.example.commerce.domains.cart.domain;
 
 import com.example.commerce.domains.item.exception.NotEnoughStockQuantityException;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

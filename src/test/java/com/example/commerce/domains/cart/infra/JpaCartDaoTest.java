@@ -75,7 +75,7 @@ class JpaCartDaoTest {
         // then
         // JpaRepository interface 를 사용하고 있는 cartRepository 으로 조회한 아이템
         Map<Long, CartLine> cart = cartRepository.findFirstByMemberId(TEST_MEMBER_ID)
-                .getCartLines();
+                .get().getCartLines();
 
         // Custom Repository 에서 얻는 데이터는 Item 데이터을 포함하므로 훨씬 많지만,
         // 사이즈는 해당 고객의 장바구니 안의 아이템 갯수인 cartLines 의 갯수로 동일해야함.
@@ -103,9 +103,7 @@ class JpaCartDaoTest {
 
     private void addItemToCart(Long memberId, Long itemId) {
         int orderCount = 1;
-        AddToCartRequestForm request = new AddToCartRequestForm();
-        request.setItemId(itemId);
-        request.setOrderCount(orderCount);
+        AddToCartRequestForm request = new AddToCartRequestForm(itemId,orderCount);
 
         //when
         cartService.addItemToCart(memberId, request);

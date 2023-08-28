@@ -3,7 +3,6 @@ package com.example.commerce.domains.cart.service;
 import com.example.commerce.domains.cart.domain.CartEntity;
 import com.example.commerce.domains.cart.domain.CartLine;
 import com.example.commerce.domains.cart.domain.CartRepository;
-import com.example.commerce.domains.cart.infra.JpaCartDao;
 import com.example.commerce.domains.cart.query.dao.CartDao;
 import com.example.commerce.domains.cart.query.dto.CartLineDto;
 import com.example.commerce.domains.item.domain.ItemRepository;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,14 +31,20 @@ public class CartService {
     }
 
     // 장바구니 생성 기능
+    // 현재는 회원가입 시 마다 장바구니 생성. -> 단, 이 경우 도메인이 서로 의존하는 문제 발생
     public Long createCart(Long memberId){
-        return cartRepository.save(new CartEntity(memberId))
-                .getCartId();
+        Optional<CartEntity> cart = cartRepository.findFirstByMemberId(memberId);
+        // memberId 로 된 장바구니가 이미 존재할 경우
+        if(cart.isPresent()) {
+            return cart.get().getCartId();
+        } else {
+            return cartRepository.save(new CartEntity(memberId)).getCartId();
+        }
     }
 
     // 장바구니 아이템 추가 기능
     public void addItemToCart(Long memberId, AddToCartRequestForm addToCartRequestForm){
-        CartEntity cartEntity = cartRepository.findById(memberId).get();
+        CartEntity cartEntity = cartRepository.findById(memberId).orElseThrow();
 
         // 장바구니 아이템 추가 요청 클래스인 AddToCartRequestForm을 이용해, CartLine을 생성
         CartLine newCartLine = new CartLine(cartEntity.getCartId(),
@@ -46,7 +52,7 @@ public class CartService {
                 addToCartRequestForm.getOrderCount());
 
         int targetStockQuantity = itemRepository.findById(addToCartRequestForm.getItemId())
-                .get()
+                .orElseThrow()
                 .getStockQuantity();
 
         // 엔티티 클래스의 addItemToCart()을 통해 값 수정, 즉 CartEntity에 수량변경 기능을 위임
@@ -70,7 +76,7 @@ public class CartService {
     }
 
     // 장바구니 안의 상품 삭제 기능 (상품 여러개)
-    public void removeCartLines(Long memberId, List<Long> itemIds) {
+    public void removeCartLine(Long memberId, List<Long> itemIds) {
         CartEntity cartEntity = cartRepository.findById(memberId).get();
         itemIds.stream().forEach(itemId -> cartEntity.removeCartLine(itemId));
     }

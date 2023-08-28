@@ -22,4 +22,8 @@ public class SuccessResponse<T> extends Response{
     public static <T> SuccessResponse<T> of(SuccessCode successCode, T data){
         return new SuccessResponse<>(successCode, data);
     }
+
+    public static <T> SuccessResponse<T> of(SuccessCode successCode){
+        return new SuccessResponse<>(successCode, null);
+    }
 }
