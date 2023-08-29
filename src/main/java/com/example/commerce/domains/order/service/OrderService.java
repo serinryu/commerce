@@ -8,9 +8,12 @@ import com.example.commerce.domains.member.domain.MemberRepository;
 import com.example.commerce.domains.order.domain.OrderEntity;
 import com.example.commerce.domains.order.domain.OrderItemEntity;
 import com.example.commerce.domains.order.domain.OrderRepository;
+import com.example.commerce.domains.order.query.OrderDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +26,21 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
+
+    // 주문 내역 조회
+    public MyOrderSummaryDTO getMyOrderSummary(Long ordererId, Pageable pageable){
+        Page<OrderEntity> myOrders = orderRepository.findByOrdererId(ordererId, pageable);
+
+        List<OrderResponseDTO> contents = myOrders.stream()
+                .map(o -> OrderResponseDTO.builder()
+                        .id(o.getId())
+                        .status(String.valueOf(o.getStatus()))
+                        .build())
+                .collect(Collectors.toList());
+        int total = contents.size();
+
+        return new MyOrderSummaryDTO(contents, total);
+    }
 
     // 주문하기 (주문 생성 -> 주문 저장)
     public OrderResponseDTO order(Long ordererId, OrderCreateRequestDTO orderCreateRequestDTO){

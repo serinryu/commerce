@@ -1,6 +1,7 @@
 package com.example.commerce.domains.cart.domain;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class CartLine {
-    private Long cartId;
+    //private Long cartId;
     private Long itemId; // 상품 ID
     private Integer orderCount; // 상품 주문수량
 }

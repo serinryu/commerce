@@ -47,7 +47,7 @@ public class CartService {
         CartEntity cartEntity = cartRepository.findById(memberId).orElseThrow();
 
         // 장바구니 아이템 추가 요청 클래스인 AddToCartRequestForm을 이용해, CartLine을 생성
-        CartLine newCartLine = new CartLine(cartEntity.getCartId(),
+        CartLine newCartLine = new CartLine(
                 addToCartRequestForm.getItemId(),
                 addToCartRequestForm.getOrderCount());
 
@@ -63,7 +63,7 @@ public class CartService {
     public void modifyOrderCount(Long memberId, ModifyOrderCountRequestForm modifyOrderCountRequestForm) {
         CartEntity cartEntity = cartRepository.findById(memberId).get();
 
-        CartLine newCartLine = new CartLine(cartEntity.getCartId(),
+        CartLine newCartLine = new CartLine(
                 modifyOrderCountRequestForm.getItemId(),
                 modifyOrderCountRequestForm.getOrderCount());
 
