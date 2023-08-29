@@ -1,91 +1,76 @@
 package com.example.commerce.common.exception;
 
-import com.example.commerce.common.exception.response.ErrorReason;
 import com.example.commerce.common.exception.response.ErrorResponse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
+import static com.example.commerce.common.exception.ErrorCode.*;
 
 // ErrorResponse 사용
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
-    /**
-     * 비즈니스 요구사항에 따른 Exception
-     */
-
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleCodeException(BusinessException e, HttpServletRequest request) {
-        ErrorCode code = e.getErrorCode();
-        ErrorReason errorReason = code.getErrorReason();
-        ErrorResponse errorResponse = ErrorResponse.of(errorReason, request.getRequestURL().toString());
+    // 지원하지 않는 HTTP 요청 메서드에 대한 예외 처리
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleMethodNotAllowed(HttpRequestMethodNotSupportedException e) {
         return ResponseEntity
-                .status(HttpStatus.valueOf(errorReason.getStatus()))
-                .body(errorResponse);
+                .status(METHOD_NOT_ALLOWED.getStatus())
+                .body(ErrorResponse.of(METHOD_NOT_ALLOWED));
     }
 
-    /**
-     * @Valid 를 통과하지 못한 요청 바디의 필드에 대한 예외
-     */
-    @SneakyThrows
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-
-        List<FieldError> errors = ex.getBindingResult().getFieldErrors();
-        ServletWebRequest servletWebRequest = (ServletWebRequest) request;
-        String url =
-                UriComponentsBuilder.fromHttpRequest(
-                                new ServletServerHttpRequest(servletWebRequest.getRequest()))
-                        .build()
-                        .toUriString();
-        Map<String, Object> fieldAndErrorMessages =
-                errors.stream()
-                        .collect(
-                                Collectors.toMap(
-                                        FieldError::getField, FieldError::getDefaultMessage));
-
-        String errorsToJsonString = new ObjectMapper().writeValueAsString(fieldAndErrorMessages);
-        ErrorResponse errorResponse = ErrorResponse.of(status.value(), status.toString(), errorsToJsonString, url);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    // @Valid 에서 발생한 binding error 에 대한 예외 처리
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
+        return ResponseEntity
+                .status(INVALID_TYPE_VALUE.getStatus())
+                .body(ErrorResponse.of(INVALID_TYPE_VALUE));
     }
 
-    /**
-     * 그 밖에 발생하는 모든 예외처리가 이곳으로 모인다.
-     */
+    // enum type 일치하지 않아서 발생하는 binding error 대한 예외 처리 (주로 @PathVariable 시 잘못된 type 데이터가 들어왔을 때 에러)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        return ResponseEntity
+            .status(INVALID_INPUT_VALUE.getStatus())
+            .body(ErrorResponse.of(INVALID_INPUT_VALUE, fieldErrors));
+    }
+
+    // binding error 에 대한 예외 처리 (주로 MVC 에서 @ModelAttribute 에서 발생)
+    @ExceptionHandler
+    protected ResponseEntity<ErrorResponse> handleBindException(BindException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        return ResponseEntity
+            .status(INVALID_INPUT_VALUE.getStatus())
+            .body(ErrorResponse.of(INVALID_INPUT_VALUE, fieldErrors));
+    }
+
+    // 비즈니스 요구사항에 따른 예외 처리
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
+        return ResponseEntity
+                .status(e.getErrorCode().getStatus())
+                .body(ErrorResponse.of(e.getErrorCode(), e.getErrors()));
+    }
+
+    // 기타 예외처리 (그 밖에 발생하는 모든 예외처리가 이곳으로 모인다.)
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> handleException(Exception e, HttpServletRequest request){
-        String url =
-                UriComponentsBuilder.fromHttpRequest(new ServletServerHttpRequest(request))
-                        .build()
-                        .toUriString();
-        ErrorCode internalServerError = ErrorCode.INTERNAL_SERVER_ERROR;
-        ErrorResponse errorResponse = ErrorResponse.of(
-                        internalServerError.getStatus(),
-                        internalServerError.getCode(),
-                        internalServerError.getReason(),
-                        url);
-        return ResponseEntity.status(HttpStatus.valueOf(internalServerError.getStatus()))
-                .body(errorResponse);
+    protected ResponseEntity<ErrorResponse> handleException(Exception e){
+        return ResponseEntity
+                .status(INTERNAL_SERVER_ERROR.getStatus())
+                .body(ErrorResponse.of(INTERNAL_SERVER_ERROR));
     }
 }

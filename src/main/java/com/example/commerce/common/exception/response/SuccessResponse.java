@@ -1,26 +1,29 @@
 package com.example.commerce.common.exception.response;
 
 import java.time.LocalDateTime;
+
+import com.example.commerce.common.exception.SuccessCode;
 import lombok.Getter;
 
 @Getter
-public class SuccessResponse {
+public class SuccessResponse<T> extends Response{
 
-    private final boolean success = true;
-    private final int status;
-    private final Object data;
-    private final LocalDateTime timeStamp;
+    private final T data;
 
-    private SuccessResponse(int status, Object data) {
-        this.status = status;
+    private SuccessResponse(SuccessCode successCode, T data) {
+        // 성공 시 code 는 항상 0
+        super(true, successCode.getStatus(), "0", successCode.getMessage(), LocalDateTime.now());
         this.data = data;
-        this.timeStamp = LocalDateTime.now();
     }
 
     /*
     기본 생성자 대신 정적 팩토리 메소드 of
      */
-    public static SuccessResponse of(final int status, final Object data){
-        return new SuccessResponse(status, data);
+    public static <T> SuccessResponse<T> of(SuccessCode successCode, T data){
+        return new SuccessResponse<>(successCode, data);
+    }
+
+    public static <T> SuccessResponse<T> of(SuccessCode successCode){
+        return new SuccessResponse<>(successCode, null);
     }
 }

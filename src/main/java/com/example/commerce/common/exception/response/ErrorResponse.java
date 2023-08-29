@@ -1,44 +1,40 @@
 package com.example.commerce.common.exception.response;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.commerce.common.exception.ErrorCode;
 import lombok.Getter;
+import org.springframework.validation.FieldError;
 
 @Getter
-public class ErrorResponse {
+public class ErrorResponse extends Response{
 
-    private final boolean success = false;
-    private final int status;
-    private final String code;
-    private final String reason;
-    private final LocalDateTime timeStamp;
+    private final List<FieldError> errors;
 
-    private final String path;
-
-    private ErrorResponse(ErrorReason errorReason, String path) {
-        this.status = errorReason.getStatus();
-        this.code = errorReason.getCode();
-        this.reason = errorReason.getReason();
-        this.timeStamp = LocalDateTime.now();
-        this.path = path;
+    private ErrorResponse(ErrorCode errorCode, List<FieldError> errors) {
+        super(false, errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage(), LocalDateTime.now());
+        this.errors = errors;
     }
 
-    private ErrorResponse(int status, String code, String reason, String path) {
-        this.status = status;
-        this.code = code;
-        this.reason = reason;
-        this.timeStamp = LocalDateTime.now();
-        this.path = path;
+    private ErrorResponse(ErrorCode errorCode) {
+        super(false, errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage(), LocalDateTime.now());
+        this.errors = new ArrayList<>();
     }
 
     /*
-    기본 생성자 대신 정적 팩토리 메소드 of
+    기본 생성자 대신 정적 팩토리 메소드 of : 입력 매개변수에 따라 유연하게 ErrorResponse 객체를 반환하므로써 다양한 예외처리에 대응
      */
 
-    public static ErrorResponse of(final ErrorReason errorReason, final String path){
-        return new ErrorResponse(errorReason, path);
+    public static ErrorResponse of(final ErrorCode code) {
+        return new ErrorResponse(code);
     }
 
-    public static ErrorResponse of(final int status, final String code, final String reason, final String path){
-        return new ErrorResponse(status, code, reason, path);
+    public static ErrorResponse of(final ErrorCode code, final List<FieldError> errors) {
+        return new ErrorResponse(code, errors);
     }
+
+
+
 }
