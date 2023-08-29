@@ -26,8 +26,8 @@ public class CartEntity {
     // 1. 수정시, 모든 로우를 삭제 후, 수정된 로우를 추가하는 문제
     // 2. 삭제시, 모든 로우를 삭제 후, 삭제 대상을 제외한 모든 로우를 다시 입력하는 문제
     @ElementCollection // 일대다 관계 대신 값 타입을 컬렉션으로 매핑
-    @CollectionTable(name = "cart_line")
-    @MapKeyColumn(name = "map_key")
+    @MapKeyColumn(name = "map_key", nullable = true)
+    @CollectionTable(name = "cart_line", joinColumns = @JoinColumn(name = "cart_id"))
     private Map<Long, CartLine> cartLines =  new HashMap<>();
 
     // CartEntity의 생성자. 생성될 때 꼭 필요한 값은 장바구니의 소유자(member)의 id값 이 전부
@@ -50,7 +50,7 @@ public class CartEntity {
             // 해당 아이템의 주문 수량을 업데이트
             int existCartItemOrderCount = cartLines.get(itemId).getOrderCount();
             int newOrderCount = existCartItemOrderCount + cartLine.getOrderCount();
-            cartLines.replace(itemId, new CartLine(cartId, itemId, newOrderCount));
+            cartLines.replace(itemId, new CartLine(itemId, newOrderCount));
         }
         // 해당 itemId로 된 아이템이 존재하지 않는 경우
         else {

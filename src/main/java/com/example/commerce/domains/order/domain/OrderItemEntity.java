@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class OrderItemEntity extends BaseEntity {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long orderItemId;
 
     private int orderCount; // 주문 상품의 갯수
     private int orderItemAmount; // 주문 상품의 가격

@@ -18,6 +18,7 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+    defer-datasource-initialization: true
 
   #### datasource
   datasource:
