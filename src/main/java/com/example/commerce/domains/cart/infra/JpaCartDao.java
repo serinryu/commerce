@@ -32,7 +32,7 @@ public class JpaCartDao implements CartDao {
                 .createQuery("select new com.example.commerce.domains.cart.query.dto.CartLineDto(i.id, i.imagePath, i.name, i.price, cl.orderCount, i.stockQuantity)" +
                         " from CartEntity c" +
                         " join c.cartLines cl" + // 조회할 Cart_Line
-                        " on c.cartId = cl.cartId" +
+//                        " on c.cartId = cl.cartId" +
                         " join ItemEntity i" + // 조회할 Item
                         " on cl.itemId = i.id" +
                         " where c.memberId = :memberId", // 파라미터로 들어온 memberId
